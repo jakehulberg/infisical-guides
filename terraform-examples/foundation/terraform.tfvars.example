@@ -1,0 +1,38 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# Infisical Configuration
+infisical_client_id     = "your-machine-identity-client-id"
+infisical_client_secret = "your-machine-identity-client-secret"
+infisical_host          = "https://app.infisical.com"
+
+# Project Configuration
+project_name = "my-infrastructure"
+project_slug = "my-infrastructure"
+environments = ["dev", "staging", "prod"]
+
+# Optional: Critical secrets that need monthly rotation
+critical_secrets = {
+  "DATABASE_MASTER_PASSWORD" = "super-secret-password"
+  "API_MASTER_KEY"          = "master-api-key"
+}
+
+# Optional: Machine Identities (advanced feature)
+create_machine_identities = false
+organization_id           = ""  # Required if creating machine identities
+
+# Services to create machine identities for
+services = {
+  api = {
+    description = "API service identity"
+  }
+  worker = {
+    description = "Background worker identity"
+  }
+}
+
+# Trusted IPs for CI/CD access (restrict in production)
+ci_cd_trusted_ips = [
+  {
+    ip_address = "0.0.0.0/0"  # Change to specific IPs/ranges
+  }
+]

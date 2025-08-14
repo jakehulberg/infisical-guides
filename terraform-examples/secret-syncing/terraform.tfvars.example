@@ -1,0 +1,21 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# Infisical Configuration
+infisical_client_id     = "your-machine-identity-client-id"
+infisical_client_secret = "your-machine-identity-client-secret"
+project_id              = "your-project-id"
+environment             = "prod"
+
+# AWS Sync Configuration
+enable_aws_secrets_manager_sync = false
+enable_aws_parameter_store_sync = false
+aws_connection_id               = ""  # Create in Infisical UI or terraform
+aws_region                      = "us-east-1"
+aws_sync_secret_path           = "/aws"
+aws_kms_key_id                 = ""  # Optional KMS encryption
+
+# GitHub Sync Configuration  
+enable_github_sync  = false
+github_connection_id = ""  # Create in Infisical UI or terraform
+github_owner        = "my-org"
+github_repository   = "my-repo"

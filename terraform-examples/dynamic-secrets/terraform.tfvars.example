@@ -1,0 +1,66 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# Infisical Configuration
+infisical_client_id     = "your-machine-identity-client-id"
+infisical_client_secret = "your-machine-identity-client-secret"
+project_id              = "your-project-id"
+project_slug            = "your-project-slug"
+environment             = "prod"
+
+# AWS Dynamic Secrets Configuration
+aws_access_key_id     = "AKIA..."
+aws_secret_access_key = "your-secret-key"
+aws_region            = "us-east-1"
+aws_default_ttl       = "2h"
+aws_max_ttl           = "4h"
+
+# S3 specific configuration
+s3_bucket_name = "my-app-bucket"
+
+# Custom policy configuration
+aws_allowed_actions = [
+  "s3:GetObject",
+  "s3:PutObject",
+  "s3:DeleteObject",
+  "s3:ListBucket"
+]
+aws_allowed_resources = "arn:aws:s3:::my-app-bucket/*"
+
+# Optional: Permission boundary for deployment
+permission_boundary_arn = ""
+
+# PostgreSQL Dynamic Secrets (optional)
+enable_sql_dynamic_secrets = false
+enable_postgres_dynamic    = false
+postgres_host              = "postgres.example.com"
+postgres_port              = "5432"
+postgres_database          = "myapp"
+postgres_ca_cert           = ""
+postgres_default_ttl       = "2h"
+postgres_max_ttl           = "4h"
+
+# MySQL Dynamic Secrets (optional)
+enable_mysql_dynamic = false
+mysql_host           = "mysql.example.com"
+mysql_port           = "3306"
+mysql_database       = "myapp"
+mysql_ca_cert        = ""
+mysql_default_ttl    = "2h"
+mysql_max_ttl        = "4h"
+
+# MongoDB Dynamic Secrets (optional)
+enable_mongodb_dynamic = false
+mongodb_host           = "mongodb.example.com"
+mongodb_port           = "27017"
+mongodb_database       = "myapp"
+mongodb_admin_user     = "admin"
+mongodb_admin_password = "secure-password"
+mongodb_default_ttl    = "2h"
+mongodb_max_ttl        = "4h"
+
+# Kubernetes Dynamic Secrets (optional)
+enable_kubernetes_dynamic = false
+kubernetes_host           = "https://k8s.example.com"
+kubernetes_admin_token    = "your-admin-token"
+kubernetes_ca_cert        = ""
+kubernetes_namespace      = "default"
