@@ -1,11 +1,13 @@
 variable "project_name" {
   description = "Name of the Infisical project"
   type        = string
+  default     = "my-app"
 }
 
 variable "project_slug" {
   description = "URL-friendly identifier for the project"
   type        = string
+  default     = "my-app"
 }
 
 variable "environments" {
@@ -32,11 +34,18 @@ variable "infisical_client_secret" {
   sensitive   = true
 }
 
-variable "critical_secrets" {
-  description = "Map of critical secrets that require monthly rotation"
-  type        = map(string)
-  default     = {}
+variable "stripe_prod_key" {
+  description = "Stripe production API key"
+  type        = string
   sensitive   = true
+  default     = ""
+}
+
+variable "stripe_test_key" {
+  description = "Stripe test API key"
+  type        = string
+  sensitive   = true
+  default     = ""
 }
 
 # Machine Identity Variables

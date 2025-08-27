@@ -1,3 +1,6 @@
+# Project folder organization and structure
+# This file demonstrates how to organize secrets within projects using folders and tags
+
 locals {
   # Standard folder structure for each environment
   folder_structure = [
@@ -32,20 +35,6 @@ resource "infisical_secret" "folder_readme" {
   value = "Folder: ${each.value.folder} in ${each.value.env} environment"
   
   comment = "Folder structure marker"
-}
-
-# Create custom project environments
-resource "infisical_project_environment" "environments" {
-  for_each = {
-    development = { name = "Development", slug = "dev" }
-    testing     = { name = "Testing", slug = "test" }
-    staging     = { name = "Staging", slug = "staging" }
-    production  = { name = "Production", slug = "prod" }
-  }
-  
-  project_id = infisical_project.main.id
-  name       = each.value.name
-  slug       = each.value.slug
 }
 
 # Create tags for secret organization

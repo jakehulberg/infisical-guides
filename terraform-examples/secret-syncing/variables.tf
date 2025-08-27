@@ -3,6 +3,12 @@ variable "project_id" {
   type        = string
 }
 
+variable "project_name" {
+  description = "Project name for resource naming"
+  type        = string
+  default     = "myapp"
+}
+
 variable "environment" {
   description = "Environment name"
   type        = string
@@ -27,22 +33,36 @@ variable "infisical_client_secret" {
   sensitive   = true
 }
 
-# AWS Sync Variables
-variable "enable_aws_secrets_manager_sync" {
+# AWS Sync Configuration
+variable "enable_aws_sync" {
   description = "Enable AWS Secrets Manager sync"
   type        = bool
   default     = false
 }
 
-variable "enable_aws_parameter_store_sync" {
-  description = "Enable AWS Parameter Store sync"
+variable "use_aws_access_keys" {
+  description = "Use AWS access keys instead of IAM role (not recommended for production)"
   type        = bool
   default     = false
 }
 
-variable "aws_connection_id" {
-  description = "AWS app connection ID (create in Infisical UI or terraform)"
+variable "aws_role_arn" {
+  description = "AWS IAM role ARN for assume-role authentication"
   type        = string
+  default     = ""
+}
+
+variable "aws_access_key_id" {
+  description = "AWS access key ID (only if using access key method)"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "aws_secret_access_key" {
+  description = "AWS secret access key (only if using access key method)"
+  type        = string
+  sensitive   = true
   default     = ""
 }
 
@@ -55,7 +75,7 @@ variable "aws_region" {
 variable "aws_sync_secret_path" {
   description = "Infisical secret path to sync to AWS"
   type        = string
-  default     = "/aws"
+  default     = "/api"
 }
 
 variable "aws_kms_key_id" {
@@ -64,7 +84,7 @@ variable "aws_kms_key_id" {
   default     = ""
 }
 
-# GitHub Sync Variables
+# GitHub Sync Configuration
 variable "enable_github_sync" {
   description = "Enable GitHub secrets sync"
   type        = bool
@@ -72,7 +92,7 @@ variable "enable_github_sync" {
 }
 
 variable "github_connection_id" {
-  description = "GitHub app connection ID (create in Infisical UI or terraform)"
+  description = "GitHub app connection ID (create in Infisical UI first)"
   type        = string
   default     = ""
 }
@@ -87,4 +107,10 @@ variable "github_repository" {
   description = "GitHub repository name"
   type        = string
   default     = ""
+}
+
+variable "github_sync_secret_path" {
+  description = "Infisical secret path to sync to GitHub"
+  type        = string
+  default     = "/ci-cd"
 }

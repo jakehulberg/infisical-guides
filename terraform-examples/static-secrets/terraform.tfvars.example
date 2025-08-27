@@ -4,46 +4,18 @@
 infisical_client_id     = "your-machine-identity-client-id"
 infisical_client_secret = "your-machine-identity-client-secret"
 project_id              = "your-project-id"
+environment             = "prod"
 
-# Project Configuration
-project_name = "my-app"
-environment  = "prod"
-environments = ["dev", "staging", "prod"]
+# Your secret values
+stripe_secret_key = "sk_live_..."
+sendgrid_api_key  = "SG...."
+db_password       = "your-secure-database-password"
 
-# Database Configuration
-db_host     = "production-db.amazonaws.com"
-db_port     = "5432"
-db_name     = "myapp"
-db_user     = "app_user"
-db_password = "secure-database-password"
+# Database configuration
+db_host = "your-postgres-host.com"
+db_port = "5432"
+db_name = "myapp"
+db_user = "app_user"
 
-# API Configuration
-api_key_value = "your-main-api-key"
-
-# Production URLs
-prod_database_url = "postgresql://user:pass@prod-db:5432/app"
-prod_redis_url    = "redis://prod-redis:6379"
-
-# Third-Party Services
-stripe_public_key     = "pk_live_..."
-stripe_secret_key     = "sk_live_..."
-stripe_webhook_secret = "whsec_..."
-sendgrid_api_key     = "SG...."
-
-# AWS Configuration
-s3_bucket_name = "my-app-storage"
-aws_region     = "us-east-1"
-cloudfront_url = "https://d123456.cloudfront.net"
-
-# Application Features
-enable_new_ui       = true
-enable_beta_features = false
-analytics_enabled   = true
-monitoring_level    = "detailed"
-
-# TLS Certificate (optional)
-tls_certificate_path = ""
-
-# Resource Creation Flags
-create_aws_resources        = false
+# Optional: Create Kubernetes resources for demonstration
 create_kubernetes_resources = false

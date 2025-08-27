@@ -1,8 +1,8 @@
 # Secret Rotation
 
-🏢 **ENTERPRISE FEATURE** - Automate credential lifecycle management with scheduled rotation for databases, cloud providers, and other services.
+**ENTERPRISE FEATURE** - Automate credential lifecycle management with scheduled rotation for databases, cloud providers, and other services.
 
-## 🏢 Enterprise-Grade Feature
+## Enterprise-Grade Feature
 
 **This is designed for enterprise environments with:**
 - Dedicated database administrators
@@ -21,11 +21,11 @@
 
 ## Prerequisites (Enterprise Setup)
 
-1. ✅ **App connections** configured (see [`../app-connections`](../app-connections))
-2. ⚠️ **Pre-created database users** - Primary and secondary users must exist in your database
-3. ⚠️ **Admin database access** - Connection credentials need user management permissions
-4. ⚠️ **Change management approval** - Coordinate rotation schedules with your team
-5. ⚠️ **Monitoring setup** - Track rotation success/failure in production
+1. **Infisical project** already created (use [`../project-bootstrap`](../project-bootstrap))
+2. **Pre-created database users** - Primary and secondary users must exist in your database
+3. **Admin database access** - Connection credentials need user management permissions
+4. **Change management approval** - Coordinate rotation schedules with your team
+5. **Monitoring setup** - Track rotation success/failure in production
 
 **For simpler needs, consider manual rotation of static secrets first.**
 
@@ -326,18 +326,18 @@ setInterval(async () => {
 ## Best Practices
 
 ### Security
-- ✅ Use separate admin credentials for rotation operations
-- ✅ Implement least-privilege for rotation service accounts
-- ✅ Enable SSL/TLS for all database connections
-- ✅ Monitor rotation failures and alerts
-- ✅ Test rotation in non-production first
+- Use separate admin credentials for rotation operations
+- Implement least-privilege for rotation service accounts
+- Enable SSL/TLS for all database connections
+- Monitor rotation failures and alerts
+- Test rotation in non-production first
 
 ### Operations
-- ✅ Schedule rotations during low-traffic periods
-- ✅ Implement connection pooling with credential refresh
-- ✅ Set up monitoring for rotation failures
-- ✅ Document rotation procedures and rollback plans
-- ✅ Test application behavior during rotation
+- Schedule rotations during low-traffic periods
+- Implement connection pooling with credential refresh
+- Set up monitoring for rotation failures
+- Document rotation procedures and rollback plans
+- Test application behavior during rotation
 
 ### Rotation Intervals
 - **High Security**: 7-14 days
@@ -419,5 +419,5 @@ infisical secrets rollback --secret=MYSQL_PASSWORD --version=<previous-version>
 ## Next Steps
 
 1. **Secret Syncing**: Sync rotated credentials to external stores with [`../secret-syncing`](../secret-syncing)
-2. **Access Controls**: Implement RBAC for rotation management with [`../access-controls`](../access-controls)
-3. **Production Setup**: See complete examples in [`../production`](../production)
+2. **Static Secrets**: For simpler use cases, see [`../static-secrets`](../static-secrets)
+3. **Dynamic Secrets**: Generate temporary credentials with [`../dynamic-secrets`](../dynamic-secrets)

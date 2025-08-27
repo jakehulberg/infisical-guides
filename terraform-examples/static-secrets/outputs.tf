@@ -1,25 +1,34 @@
-output "secret_count" {
-  value = length(infisical_secret.database_config) + length(infisical_secret.service_secrets) + length(infisical_secret.env_config)
-  description = "Total number of secrets created"
+output "created_secrets" {
+  value = {
+    api_secrets = [
+      infisical_secret.stripe_key.name,
+      infisical_secret.jwt_secret.name
+    ]
+    database_secrets = [
+      infisical_secret.database_url.name,
+      infisical_secret.redis_url.name
+    ]
+    third_party_secrets = [
+      infisical_secret.sendgrid_key.name
+    ]
+  }
+  description = "List of created secrets organized by category"
 }
 
-output "generated_secrets" {
+output "secret_locations" {
   value = {
-    session_secret_length = length(random_password.session_secret.result)
-    encryption_key_length = length(random_password.encryption_key.result)
-    instance_id          = random_id.instance_id.hex
+    api_folder        = "/api"
+    database_folder   = "/database"
+    third_party_folder = "/third-party"
   }
-  description = "Information about generated secrets"
+  description = "Folder paths where secrets are organized"
 }
 
-output "folder_structure" {
+output "ephemeral_example" {
   value = {
-    api_secrets       = "/api"
-    database_secrets  = "/database"
-    payment_secrets   = "/third-party/payment"
-    email_secrets     = "/third-party/email"
-    storage_secrets   = "/third-party/storage"
-    infrastructure    = "/infrastructure"
+    stripe_value = ephemeral.infisical_secret.stripe_key_retrieval.value
+    database_url = ephemeral.infisical_secret.database_url_retrieval.value
   }
-  description = "Folder structure used for organizing secrets"
+  description = "Example of retrieved secret values using ephemeral resources"
+  sensitive = true
 }
