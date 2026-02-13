@@ -1,6 +1,6 @@
 # ESO Demo - External Secrets Operator with Infisical
 
-A working demo that syncs secrets from [Infisical](https://infisical.com) into Kubernetes using the [External Secrets Operator](https://external-secrets.io) with **Kubernetes Auth** — no static credentials required.
+A working demo that syncs secrets from [Infisical](https://infisical.com) into Kubernetes using the [External Secrets Operator](https://external-secrets.io) with [Kubernetes Auth](https://infisical.com/docs/documentation/platform/identities/kubernetes-auth) — no static credentials required.
 
 ## How It Works
 
@@ -12,8 +12,8 @@ Infisical (source of truth)
 SecretStore --> ExternalSecret --> K8s Secret --> Pod (env vars)
 ```
 
-1. A **SecretStore** defines the connection to Infisical using Kubernetes Auth
-2. An **ExternalSecret** maps specific Infisical secrets to a Kubernetes Secret
+1. A **[SecretStore](https://external-secrets.io/latest/provider/infisical/)** defines the connection to Infisical using [Kubernetes Auth](https://infisical.com/docs/documentation/platform/identities/kubernetes-auth)
+2. An **[ExternalSecret](https://external-secrets.io/latest/api/externalsecret/)** maps specific Infisical secrets to a Kubernetes Secret
 3. ESO syncs the values on a configurable refresh interval
 4. The app consumes the Kubernetes Secret as environment variables
 
@@ -39,7 +39,9 @@ The demo app is a simple Flask page that displays the synced secret values so yo
 
 ## Prerequisites
 
-- A Kubernetes cluster with a **public API server endpoint** (e.g. EKS, GKE, AKS — not minikube, since Infisical Cloud needs to reach the API server for TokenReview)
+- A Kubernetes cluster with a **public API server endpoint** (e.g. EKS, GKE, AKS)
+
+> **Note:** Infisical Cloud needs to call back to your cluster's TokenReview API, so minikube and other local clusters won't work — use a cloud-hosted cluster instead.
 - `kubectl`, `helm` installed
 - Docker installed (to build the app image)
 - An [Infisical](https://infisical.com) account
@@ -96,11 +98,11 @@ Save this token — you'll need it when configuring Infisical.
 
 ### 5. Configure Infisical
 
-1. Create a project and add your secrets in the `dev` environment (e.g. `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `API_KEY`)
-2. Note your **project slug** from Project Settings
-3. Create a **Machine Identity** in your project (Access Control → Identities)
-4. Create a custom role scoped to **read-only** access on secrets in the `dev` environment, and assign it to the identity
-5. Add **Kubernetes Auth** to the identity:
+1. [Create a project](https://infisical.com/docs/documentation/platform/secrets-mgmt/project) and add your secrets in the `dev` environment (e.g. `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `API_KEY`)
+2. Note your **project slug** from [Project Settings](https://infisical.com/docs/documentation/platform/project)
+3. Create a [Machine Identity](https://infisical.com/docs/documentation/platform/identities/machine-identities) in your project (Access Control → Identities)
+4. Create a [custom role](https://infisical.com/docs/documentation/platform/access-controls/role-based-access-controls) scoped to **read-only** access on secrets in the `dev` environment, and assign it to the identity
+5. Add [Kubernetes Auth](https://infisical.com/docs/documentation/platform/identities/kubernetes-auth) to the identity:
    - **Kubernetes Host:** your cluster's API server URL (`kubectl cluster-info`)
    - **Token Reviewer JWT:** the token from step 4
    - **Allowed Service Account Names:** `external-secrets`
@@ -111,6 +113,8 @@ Save this token — you'll need it when configuring Infisical.
      ```
 6. Copy the **Identity ID** from the Machine Identity page
 
+> **Note:** The identity ID is not sensitive — it's a reference ID that is useless without the Kubernetes Auth flow behind it.
+
 ### 6. Update and apply the manifests
 
 Update these files with your values:
@@ -118,6 +122,8 @@ Update these files with your values:
 - `k8s/infisical-identity.yaml` — replace the `identityId` with yours
 - `k8s/secretstore.yaml` — update `projectSlug` to match your Infisical project
 - `k8s/externalsecret.yaml` — update the `data` keys to match your Infisical secret names
+
+> **Note:** ESO syncs are all-or-nothing. If any key in the ExternalSecret fails to fetch from Infisical, none of them sync. Make sure all keys exist in your Infisical project.
 
 ```bash
 kubectl apply -f k8s/infisical-identity.yaml
@@ -138,15 +144,20 @@ Open `http://<EXTERNAL-IP>:5000` — your secrets should now appear in green.
 
 ## Teardown
 
+> **Note:** If you tear down your cluster and create a new one, you'll need to update the Kubernetes Auth settings in Infisical — each cluster has a different API server URL and token reviewer JWT.
+
 Delete the cluster when you're done to avoid charges. Example for EKS:
 
 ```bash
 eksctl delete cluster --name eso-demo --region us-east-1
 ```
 
-## Notes
+## Learn More
 
-- **Kubernetes Auth requires a publicly reachable API server.** Infisical Cloud needs to call back to your cluster's TokenReview API. This is why minikube won't work — use a cloud-hosted cluster instead.
-- **New cluster = new config in Infisical.** Each cluster has a different API server URL and token reviewer JWT. Update both in the Machine Identity's Kubernetes Auth settings after creating a new cluster.
-- **The identity ID is not sensitive.** It's a reference ID that is useless without the Kubernetes Auth flow behind it.
-- **ESO syncs are all-or-nothing.** If any key in the ExternalSecret fails to fetch from Infisical, none of them sync. Make sure all keys exist in your Infisical project.
+- [Kubernetes Auth](https://infisical.com/docs/documentation/platform/identities/kubernetes-auth) — how Infisical authenticates Kubernetes workloads
+- [Machine Identities](https://infisical.com/docs/documentation/platform/identities/machine-identities) — non-human identities for workloads and applications
+- [Access Controls](https://infisical.com/docs/documentation/platform/access-controls/role-based-access-controls) — RBAC, custom roles, and attribute-based access controls
+- [Infisical Kubernetes Operator](https://infisical.com/docs/integrations/platforms/kubernetes) — Infisical's native K8s operator (alternative to ESO)
+- [ESO Infisical Provider](https://external-secrets.io/latest/provider/infisical/) — External Secrets Operator docs for the Infisical provider
+- [Infisical Documentation](https://infisical.com/docs) — full platform docs
+
